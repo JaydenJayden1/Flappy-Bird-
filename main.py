@@ -8,7 +8,6 @@ player = player.subsurface(player.get_bounding_rect())
 player_pos = pygame.Vector2(20,240)
 why_speed = 0
 pipe = pygame.image.load('Pipes.png')
-
 game_running = True
 while game_running: 
     jump=False
@@ -22,7 +21,6 @@ while game_running:
         if event.type==pygame.MOUSEBUTTONDOWN:
             if event.button==1:
                 jump=True
-    
     background.fill("sky blue")
     why_speed+=.26
     if jump:
