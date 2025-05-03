@@ -1,4 +1,5 @@
 import pygame
+from pipe import Pipe
 pygame.init()
 background=pygame.display.set_mode((400,600))
 clock= pygame.time.Clock()
@@ -8,6 +9,9 @@ player = player.subsurface(player.get_bounding_rect())
 player_pos = pygame.Vector2(20,240)
 why_speed = 0
 pipe = pygame.image.load('Pipes.png')
+
+pipe1 = Pipe(50)
+
 
 game_running = True
 while game_running: 
@@ -22,12 +26,15 @@ while game_running:
         if event.type==pygame.MOUSEBUTTONDOWN:
             if event.button==1:
                 jump=True
+        
                 
+    
     background.fill("sky blue")
+    pipe1.update(background)
     why_speed+=.26
     if jump:
         why_speed=-5
     player_pos.y+=why_speed
     background.blit(player,player_pos)
-    pygame.display.flip()
-    clock.tick(60)
+    pygame.display. flip()
+    clock.tick(60) 
