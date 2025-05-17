@@ -1,5 +1,7 @@
 import pygame
 from pipe import Pipe
+# This is the main file that runs the game
+# and manages the game loop
 pygame.init()
 background=pygame.display.set_mode((400,600))
 clock= pygame.time.Clock()
@@ -12,7 +14,7 @@ pipe = pygame.image.load('Pipes.png')
 
 pipe1 = Pipe(50)
 
-
+## Set the initial position of the player
 game_running = True
 while game_running: 
     jump=False
@@ -28,7 +30,7 @@ while game_running:
                 jump=True
         
                 
-    
+    # Update the position of the pipe
     background.fill("sky blue")
     pipe1.update(background)
     why_speed+=.26
