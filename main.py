@@ -6,7 +6,7 @@ pygame.init()
 background=pygame.display.set_mode((400,600))
 clock= pygame.time.Clock()
 player = pygame.image.load('Flappy bird.png').convert_alpha()
-player = pygame.transform.smoothscale(player, (100,100))
+player = pygame.transform.smoothscale(player, (100,1))
 player = player.subsurface(player.get_bounding_rect())
 player_pos = player.get_rect(topleft = [20,240])
 why_speed = 0
@@ -34,7 +34,7 @@ while game_running:
  
     # Update the position of the pipe
     background.fill("sky blue")
-    pipe1.update(background)
+    pipe1.update(background,player_pos)
     why_speed+=.26
     if jump:
         why_speed=-5

@@ -18,9 +18,14 @@ class Pipe:
     
     # Update the position of the pipe
     # and draw it on the screen
+    def collision(self, bird):
+        if bird.colliderect(self.rect) or bird.colliderect(self.rect2):
+           print("Colliding")
 
-    def update(self,screen): 
-        
+         
+
+    def update(self,screen,bird): 
+        self.collision(bird)
         if self.rect.right <= 0:
             self.rect.x = 700
             self.rect.y= random.randint(400, 450)
