@@ -16,8 +16,7 @@ class Pipe:
         self.rect2.x = self.rect.x
         self.rect2.y = self.rect.y - 750
     
-    # Update the position of the pipe
-    # and draw it on the screen
+     #U#and draw it on the screen
     def collision(self, bird):
         if bird.colliderect(self.rect) or bird.colliderect(self.rect2):
            print("Colliding")

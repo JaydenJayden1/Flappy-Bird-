@@ -6,11 +6,15 @@ pygame.init()
 background=pygame.display.set_mode((400,600))
 clock= pygame.time.Clock()
 player = pygame.image.load('Flappy bird.png').convert_alpha()
-player = pygame.transform.smoothscale(player, (100,1))
-player = player.subsurface(player.get_bounding_rect())
+player = pygame.transform.smoothscale(player, (100,100))
+player = player.subsurface(player.get_bounding_rect().inflate(-0, -0)) #inflate(x,y) changes the size of bounding box by x and y pixels
+print(player.get_height())
+print(player.get_width())
 player_pos = player.get_rect(topleft = [20,240])
 why_speed = 0
 pipe = pygame.image.load('Pipes.png')
+#print("height:" + player.get_bounding_rect().height)
+#print("width:" + player.get_bounding_rect().width)
 
 pipe1 = Pipe(50)
 
@@ -23,7 +27,7 @@ while game_running:
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
             game_running=False
-            pygame.quit()
+            pygame.quit() 
         if event.type==pygame.KEYDOWN:
             if event.key==pygame.K_SPACE or event.key==pygame.K_UP:
                 jump=True
