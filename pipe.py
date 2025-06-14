@@ -8,6 +8,10 @@ class Pipe:
         self.image = pygame.image.load('Pipes.png')
         self.image = pygame.transform.scale(self.image, [400,600])
         self.image2 = pygame.transform.flip(self.image, False, True)
+        self.image = self.image.subsurface(self.image.get_bounding_rect().inflate(-0, -0))
+        self.image2 = self.image2.subsurface(self.image2.get_bounding_rect().inflate(-0, -0))
+        pygame.image.save(self.image, "pipe2.png")
+        pygame.image.save(self.image2, "pipe.png")
         self.rect2 = self.image2.get_rect()
         self.rect = self.image.get_rect()
         self.movement = 5
@@ -19,7 +23,7 @@ class Pipe:
      #U#and draw it on the screen
     def collision(self, bird):
         if bird.colliderect(self.rect) or bird.colliderect(self.rect2):
-           print("Colliding")
+           pygame.quit()
 
          
 

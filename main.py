@@ -8,6 +8,7 @@ clock= pygame.time.Clock()
 player = pygame.image.load('Flappy bird.png').convert_alpha()
 player = pygame.transform.smoothscale(player, (100,100))
 player = player.subsurface(player.get_bounding_rect().inflate(-0, -0)) #inflate(x,y) changes the size of bounding box by x and y pixels
+pygame.image.save(player, "player.png")
 print(player.get_height())
 print(player.get_width())
 player_pos = player.get_rect(topleft = [20,240])
@@ -22,7 +23,7 @@ pipe1 = Pipe(50)
 game_running = True
 font = pygame.font.SysFont("impact", 30)
 while game_running:
-    pygame.display.set_caption("coool game")
+    
     jump=False
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
