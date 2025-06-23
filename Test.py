@@ -75,10 +75,12 @@ while running:
         asteroid["pos"] += asteroid["vel"]
         asteroid["pos"] = wrap_position(asteroid["pos"])
 
-    # Update laser positions
+    # Update laser positions and remove if off screen
     for laser in lasers[:]:
         laser["pos"] += laser["dir"] * laser_speed
-        laser["pos"] = wrap_position(laser["pos"])
+        if (laser["pos"].x < 0 or laser["pos"].x > screen_width or
+            laser["pos"].y < 0 or laser["pos"].y > screen_height):
+            lasers.remove(laser)
 
     # Check for laser-asteroid collisions
     for laser in lasers[:]:
