@@ -37,7 +37,7 @@ font = pygame.font.SysFont("Arial", 36)
 big_font = pygame.font.SysFont("Arial", 100)
 
 # Game timer
-total_time = 300
+total_time = 60
 start_ticks = None
 
 # Invincibility
