@@ -13,6 +13,7 @@ game_started = False
 game_over = False
 you_win = False
 level = 1  # Track current level
+max_level = 2  # Define max levels
 
 # Load and scale background
 background_image = pygame.image.load('Space_S.webp')
@@ -43,7 +44,7 @@ font = pygame.font.SysFont("Arial", 36)
 big_font = pygame.font.SysFont("Arial", 100)
 
 # Game timer
-total_time = 5  # Changed from 60 to 5 seconds
+total_time = 5
 start_ticks = None
 
 # Invincibility
@@ -63,7 +64,7 @@ ASTEROID_SIZES = {
 ufos = []
 ufo_lasers = []
 ufo_laser_speed = 5
-ufo_shoot_interval = 10000  # milliseconds (10 seconds)
+ufo_shoot_interval = 10000
 last_ufo_shot_time = 0
 ufo_speed = 1.0
 
@@ -131,6 +132,15 @@ button_width, button_height = 300, 100
 button_rect = pygame.Rect(screen_width//2 - button_width//2, screen_height//2 - button_height//2, button_width, button_height)
 asteroids = []
 
+# Initialize player and variables
+player = pygame.Vector2(screen_width, screen_height) / 2
+angle = 180
+speed = pygame.Vector2()
+lasers = []
+score = 0
+hits = 0
+exploded = False
+
 # MAIN LOOP
 while running:
     keys = pygame.key.get_pressed()
@@ -144,14 +154,21 @@ while running:
             if event.type == pygame.MOUSEBUTTONDOWN and button_rect.collidepoint(event.pos):
                 game_started = True
                 reset_game(level)
-        
+
         elif game_over:
             if event.type == pygame.KEYDOWN:
+                # R: Next level (restart with next level)
                 if event.key == pygame.K_r:
-                    # Restart current level
-                    reset_game(level)
+                    next_level = level + 1 if level < max_level else 1
+                    reset_game(next_level)
+                # ESC: Quit game
                 elif event.key == pygame.K_ESCAPE:
                     running = False
+                # SHIFT + C: Continue/unpause game
+                elif event.key == pygame.K_c and (pygame.key.get_mods() & pygame.KMOD_SHIFT):
+                    paused = False
+                    game_over = False  # Continue game after game over (if desired)
+                    # You might want to reset things or just unpause here depending on design
 
         else:
             if event.type == pygame.KEYDOWN:
@@ -167,6 +184,9 @@ while running:
                     invincible = True
                     invincible_start = pygame.time.get_ticks()
                     invincible_uses -= 1
+                # Shift + C to continue even during gameplay pause
+                elif event.key == pygame.K_c and (pygame.key.get_mods() & pygame.KMOD_SHIFT):
+                    paused = False
 
     if not game_started:
         screen.blit(background_image, background_rect)
@@ -194,7 +214,7 @@ while running:
         else:
             lose_text = big_font.render("YOU LOSE", True, (255, 0, 0))
             screen.blit(lose_text, (screen_width//2 - lose_text.get_width()//2, screen_height//2 - 100))
-        tip_text = font.render("Press R to Restart - Press ESC to Quit", True, (255, 255, 255))
+        tip_text = font.render("Press R to go to Next Level - Press ESC to Quit - Shift+C to Continue", True, (255, 255, 255))
         screen.blit(tip_text, (screen_width//2 - tip_text.get_width()//2, screen_height//2 + 100))
         pygame.display.flip()
         clock.tick(60)
@@ -203,10 +223,13 @@ while running:
     if paused:
         pause_text = font.render("PAUSED", True, (255, 255, 255))
         screen.blit(pause_text, (screen_width // 2 - pause_text.get_width() // 2, 100))
+        tip_text = font.render("Press Shift+C to Continue or P to Pause", True, (255, 255, 255))
+        screen.blit(tip_text, (screen_width // 2 - tip_text.get_width() // 2, 150))
         pygame.display.flip()
         clock.tick(60)
         continue
 
+    # Handle invincibility timing
     if invincible:
         elapsed = (pygame.time.get_ticks() - invincible_start) / 1000
         if elapsed >= invincible_duration:
@@ -349,8 +372,8 @@ while running:
         if not exploded:
             you_win = True
             # If won level 1, automatically go to level 2 after 2 seconds delay
-            if level == 1:
-                pygame.time.delay(2000)
-                reset_game(new_level=2)
+            # You can remove this if you want manual control with R
+            # pygame.time.delay(2000)
+            # reset_game(new_level=2)
 
 pygame.quit()
