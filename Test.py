@@ -27,7 +27,8 @@ explosion_img = pygame.transform.scale(explosion_img, (100, 100))
 win_image = pygame.image.load('OIP__11_-removebg-preview.png')
 win_image = pygame.transform.scale(win_image, (300, 300))
 
-# New second-level win image
+# New second-level win image and OG image
+
 win_image_lvl2 = pygame.image.load('ast-uranus-removebg-preview.png')
 win_image_lvl2 = pygame.transform.scale(win_image_lvl2, (300, 300))
 
@@ -91,12 +92,12 @@ def reset_game(new_level=1):
     ufos.clear()
     ufo_lasers.clear()
     last_ufo_shot_time = pygame.time.get_ticks()
-    asteroid_count = 10 + 5 * (level - 1)  # More asteroids on level 2
+    asteroid_count = 1 + 5 * (level - 1)  # More asteroids on level 2
     ufo_speed = 1.0 + 0.5 * (level - 1)  # UFOs get faster on level 2
 
-    total_time = 5  # Timer now 5 seconds
+    total_time = 5 # Timer now 5 seconds
 
-    for _ in range(asteroid_count):
+    for _ in range(asteroid_count): #creates a maximum of 5 asteroids
         asteroids.append(create_asteroid())
     ufos.append(create_ufo())
     pygame.mixer.music.play(-1)
@@ -204,15 +205,18 @@ while running:
     if game_over:
         screen.blit(background_image, background_rect)
         if you_win:
-            win_text = big_font.render("YOU WIN", True, (255, 255, 0))
+            win_text = big_font.render("YOU WIN!", True, (255, 255, 0))
+            
             screen.blit(win_text, (screen_width//2 - win_text.get_width()//2, screen_height//2 - 100))
             # Show correct win image depending on level
             if level == 1:
                 screen.blit(win_image, (screen_width - win_image.get_width() - 100, screen_height//2 - win_image.get_height()//2))
             else:
                 screen.blit(win_image_lvl2, (screen_width - win_image_lvl2.get_width() - 100, screen_height//2 - win_image_lvl2.get_height()//2))
+            if level == 2:
+                screen.blit(win_image, (screen_width - win_image.get_width()- 100, screen_height//2 - win_image.get_height()//2))
         else:
-            lose_text = big_font.render("YOU LOSE", True, (255, 0, 0))
+            lose_text = big_font.render("YOU LOSE!", True, (255, 0, 0))
             screen.blit(lose_text, (screen_width//2 - lose_text.get_width()//2, screen_height//2 - 100))
         tip_text = font.render("Press R to go to Next Level - Press ESC to Quit - Shift+C to Continue", True, (255, 255, 255))
         screen.blit(tip_text, (screen_width//2 - tip_text.get_width()//2, screen_height//2 + 100))
@@ -364,7 +368,6 @@ while running:
     pygame.display.flip()
     clock.tick(60)
 
-    # When game ends and not already in game_over state
     if (exploded or remaining_time <= 0) and not game_over:
         pygame.mixer.music.stop()
         pygame.time.delay(1000)
