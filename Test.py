@@ -2,7 +2,6 @@ import pygame
 import random
 import math
 
-# Initialize pygame
 pygame.init()
 screen_width, screen_height = 1920, 1080
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -12,22 +11,19 @@ paused = False
 game_started = False
 game_over = False
 you_win = False
-level = 1  # Track current level
-max_level = 2  # Define max levels
+level = 1  
+max_level = 2  
 
-# Load and scale background
 background_image = pygame.image.load('Space_S.webp')
 background_image = pygame.transform.scale(background_image, (screen_width, screen_height))
 background_rect = background_image.get_rect()
 
-# Load images
 astroid_img = pygame.image.load('Astriod-removebg-preview.png')
 explosion_img = pygame.image.load('cartoon-type-explosion-drawing-red-orange-yellow-violent-110908926-removebg-preview.png')
 explosion_img = pygame.transform.scale(explosion_img, (100, 100))
 win_image = pygame.image.load('OIP__11_-removebg-preview.png')
 win_image = pygame.transform.scale(win_image, (300, 300))
 
-# New second-level win image and OG image
 
 win_image_lvl2 = pygame.image.load('ast-uranus-removebg-preview.png')
 win_image_lvl2 = pygame.transform.scale(win_image_lvl2, (300, 300))
@@ -35,33 +31,27 @@ win_image_lvl2 = pygame.transform.scale(win_image_lvl2, (300, 300))
 ufo_img = pygame.image.load('ufo-cartoon-alien-spaceship-cosmic-ship-form-saucer-ufo-cartoon-alien-spaceship-cosmic-ship-form-saucer-181588751-removebg-preview.png')
 ufo_img = pygame.transform.scale(ufo_img, (80, 60))  # Resize as needed
 
-# Load sounds
 explosion_sound = pygame.mixer.Sound('mixkit-explosion-hit-1704.wav')
 laser_sound = pygame.mixer.Sound('mixkit-short-laser-gun-shot-1670.wav')
 pygame.mixer.music.load('Not Like Us.mp3')
 
-# Font setup
 font = pygame.font.SysFont("Arial", 36)
 big_font = pygame.font.SysFont("Arial", 100)
 
-# Game timer
 total_time = 5
 start_ticks = None
 
-# Invincibility
 invincible = False
 invincible_start = 0
 invincible_duration = 10
 invincible_uses = 5
 
-# Asteroid sizes
 ASTEROID_SIZES = {
     "large": 60,
     "medium": 40,
     "small": 20
 }
 
-# UFO variables
 ufos = []
 ufo_lasers = []
 ufo_laser_speed = 5
@@ -92,12 +82,12 @@ def reset_game(new_level=1):
     ufos.clear()
     ufo_lasers.clear()
     last_ufo_shot_time = pygame.time.get_ticks()
-    asteroid_count = 1 + 5 * (level - 1)  # More asteroids on level 2
-    ufo_speed = 1.0 + 0.5 * (level - 1)  # UFOs get faster on level 2
+    asteroid_count = 1 + 5 * (level - 1)   
+    ufo_speed = 1.0 + 0.5 * (level - 1)  
 
-    total_time = 5 # Timer now 5 seconds
+    total_time = 5 
 
-    for _ in range(asteroid_count): #creates a maximum of 5 asteroids
+    for _ in range(asteroid_count): 
         asteroids.append(create_asteroid())
     ufos.append(create_ufo())
     pygame.mixer.music.play(-1)
@@ -133,7 +123,6 @@ button_width, button_height = 300, 100
 button_rect = pygame.Rect(screen_width//2 - button_width//2, screen_height//2 - button_height//2, button_width, button_height)
 asteroids = []
 
-# Initialize player and variables
 player = pygame.Vector2(screen_width, screen_height) / 2
 angle = 180
 speed = pygame.Vector2()
@@ -142,7 +131,6 @@ score = 0
 hits = 0
 exploded = False
 
-# MAIN LOOP
 while running:
     keys = pygame.key.get_pressed()
     current_time = pygame.time.get_ticks()
@@ -158,18 +146,18 @@ while running:
 
         elif game_over:
             if event.type == pygame.KEYDOWN:
-                # R: Next level (restart with next level)
+                
                 if event.key == pygame.K_r:
                     next_level = level + 1 if level < max_level else 1
                     reset_game(next_level)
-                # ESC: Quit game
+                
                 elif event.key == pygame.K_ESCAPE:
                     running = False
-                # SHIFT + C: Continue/unpause game
+                
                 elif event.key == pygame.K_c and (pygame.key.get_mods() & pygame.KMOD_SHIFT):
                     paused = False
-                    game_over = False  # Continue game after game over (if desired)
-                    # You might want to reset things or just unpause here depending on design
+                    game_over = False  
+                    
 
         else:
             if event.type == pygame.KEYDOWN:
@@ -185,7 +173,6 @@ while running:
                     invincible = True
                     invincible_start = pygame.time.get_ticks()
                     invincible_uses -= 1
-                # Shift + C to continue even during gameplay pause
                 elif event.key == pygame.K_c and (pygame.key.get_mods() & pygame.KMOD_SHIFT):
                     paused = False
 
@@ -208,7 +195,6 @@ while running:
             win_text = big_font.render("YOU WIN!", True, (255, 255, 0))
             
             screen.blit(win_text, (screen_width//2 - win_text.get_width()//2, screen_height//2 - 100))
-            # Show correct win image depending on level
             if level == 1:
                 screen.blit(win_image, (screen_width - win_image.get_width() - 100, screen_height//2 - win_image.get_height()//2))
             else:
@@ -233,7 +219,7 @@ while running:
         clock.tick(60)
         continue
 
-    # Handle invincibility timing
+    
     if invincible:
         elapsed = (pygame.time.get_ticks() - invincible_start) / 1000
         if elapsed >= invincible_duration:
@@ -250,19 +236,18 @@ while running:
             asteroid["pos"] += asteroid["vel"]
             asteroid["pos"] = wrap_position(asteroid["pos"])
 
-        # UFO movement
+
         for ufo in ufos:
             ufo["pos"] += ufo["vel"]
             ufo["pos"] = wrap_position(ufo["pos"])
 
-        # UFO shooting every 10 seconds
+        
         if current_time - last_ufo_shot_time > ufo_shoot_interval:
             last_ufo_shot_time = current_time
             for ufo in ufos:
                 direction = (player - ufo["pos"]).normalize()
                 ufo_lasers.append({"pos": ufo["pos"].copy(), "dir": direction})
 
-        # Laser movement and removal
         for laser in lasers[:]:
             laser["pos"] += laser["dir"] * 15
             if not (0 <= laser["pos"].x <= screen_width and 0 <= laser["pos"].y <= screen_height):
@@ -273,7 +258,6 @@ while running:
             if not (0 <= ufo_laser["pos"].x <= screen_width and 0 <= ufo_laser["pos"].y <= screen_height):
                 ufo_lasers.remove(ufo_laser)
 
-        # Laser-asteroid collisions
         for laser in lasers[:]:
             laser_rect = pygame.Rect(laser["pos"].x, laser["pos"].y, 4, 4)
             for asteroid in asteroids[:]:
@@ -292,7 +276,7 @@ while running:
                     asteroids.append(create_asteroid())
                     break
 
-        # Player collision with asteroids
+        
         player_rect = pygame.Rect(player.x - 20, player.y - 20, 40, 40)
         for asteroid in asteroids:
             size_px = ASTEROID_SIZES[asteroid["size"]]
@@ -308,7 +292,7 @@ while running:
                         exploded = True
                 break
 
-        # Player collision with UFO lasers
+        
         for ufo_laser in ufo_lasers[:]:
             laser_rect = pygame.Rect(ufo_laser["pos"].x, ufo_laser["pos"].y, 6, 6)
             if player_rect.colliderect(laser_rect):
@@ -322,7 +306,7 @@ while running:
                 else:
                     ufo_lasers.remove(ufo_laser)
 
-    # Draw everything
+    
     screen.blit(background_image, background_rect)
 
     if not exploded:
@@ -339,11 +323,11 @@ while running:
         scaled_img = pygame.transform.scale(astroid_img, (size_px, size_px))
         screen.blit(scaled_img, asteroid["pos"])
 
-    # Draw UFOs
+    
     for ufo in ufos:
         screen.blit(ufo_img, ufo["pos"])
 
-    # Draw UFO lasers
+    
     for ufo_laser in ufo_lasers:
         pygame.draw.circle(screen, (0, 255, 0), (int(ufo_laser["pos"].x), int(ufo_laser["pos"].y)), 6)
 
@@ -374,9 +358,6 @@ while running:
         game_over = True
         if not exploded:
             you_win = True
-            # If won level 1, automatically go to level 2 after 2 seconds delay
-            # You can remove this if you want manual control with R
-            # pygame.time.delay(2000)
-            # reset_game(new_level=2)
+            
 
 pygame.quit()
