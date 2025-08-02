@@ -10,18 +10,20 @@ pygame.display.set_caption("Shooting Game")
 
 class guy(pygame.sprite.Sprite):
     def __init__(self, x, y, scale):
+        pygame.sprite.Sprite.__init__(self)
+        img = pygame.image.load(r"C:\Users\docun\Downloads\fsVojV-removebg-preview.png")
+        self.img = pygame.transform.scale(img, (int(img.get_width() * scale), int (img.get_height() * scale)))
+        self.rect = self.img.get_rect()
+        self.rect.center * (x,y)    
         
         
+player = guy(200, 200, 3)
 
 
-x = 200
-y = 200
-img = pygame.image.load(r"C:\Users\docun\Downloads\fsVojV-removebg-preview.png")
-img = pygame.transform.scale(img, (80, 60))
-rect = img.get_rect()
+
 mayo = True
 while mayo:
-    ranch.blit(img, rect)
+    ranch.blit(player.image, player.rect)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             mayo = False
